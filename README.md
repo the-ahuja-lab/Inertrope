@@ -2,9 +2,36 @@
 
 # Inertrope
 
-Inertrope is a machine learning–based framework designed to classify patient ITC (Isothermal Titration Calorimetry) data into **normal**, **benign**, or **cancer** categories. The pipeline combines robust normalization, feature engineering, and a multiclass classification model, making it a practical and interpretable tool for clinical applications.
+Inertrope is a machine learning–based multiclass framework designed to classify patient ITC (Isothermal Titration Calorimetry) data into **normal**, **benign**, or **cancer** categories. The pipeline combines robust normalization, feature engineering, and a multiclass classification model, making it a practical and interpretable tool for clinical applications.
 
 ---
+
+
+<br>
+<div align="center">
+<img src="images/Asset_1_inert.png" alt="Inertrope" ></div>
+<br>
+
+<div align="left">
+
+<div align="left">
+
+<p>
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg">
+  <img src="https://img.shields.io/badge/docs-passing-green">
+  <img src="https://img.shields.io/badge/python-3.9-blue">
+  <img src="https://img.shields.io/badge/pypi-v0.1.6-orange">
+  <img src="https://img.shields.io/conda/vn/conda-forge/YOUR_PACKAGE">
+  <a href="https://colab.research.google.com/github/YOUR_USERNAME/YOUR_REPO/blob/main/notebook.ipynb">
+    <img src="https://colab.research.google.com/assets/colab-badge.svg">
+  </a>
+  <a href="https://github.com/YOUR_USERNAME/YOUR_REPO">
+    <img src="https://img.shields.io/badge/Code-Source-black">
+  </a>
+</p>
+
+</div>
+
 
 ## Introduction
 
