@@ -9,7 +9,7 @@ Inertrope is a machine learning–based multiclass framework designed to classif
 
 <br>
 <div align="center">
-<img src="images/inertrope.png" alt="Inertrope" ></div>
+<img src="Images/inertrope.png" alt="Inertrope" ></div>
 <br>
 
 <div align="left">
