@@ -22,7 +22,8 @@ Inertrope is a machine learning–based multiclass framework designed to classif
   <img src="https://img.shields.io/badge/python-3.9-blue">
   <img src="https://img.shields.io/badge/pypi-v0.1.6-orange">
   <img src="https://img.shields.io/conda/vn/conda-forge/YOUR_PACKAGE">
-  <a href="https://colab.research.google.com/github/YOUR_USERNAME/YOUR_REPO/blob/main/notebook.ipynb">
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1qTmiELb_6tsbV7xuU1IcY-cAZSlWAIrt?usp=sharing)
+  [![GitHub](https://img.shields.io/badge/GitHub-Repository-grey?style=flat&labelColor=black&logo=github&logoColor=#181717)](https://github.com/the-ahuja-lab/Inertrope/)
     <img src="https://colab.research.google.com/assets/colab-badge.svg">
   </a>
   <a href="https://github.com/YOUR_USERNAME/YOUR_REPO">
