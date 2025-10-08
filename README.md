@@ -1,5 +1,3 @@
-
-
 # Inertrope
 
 Inertrope is a machine learning–based multiclass framework designed to classify patient ITC (Isothermal Titration Calorimetry) data into **normal**, **benign**, or **cancer** categories. The pipeline combines robust normalization, feature engineering, and a multiclass classification model, making it a practical and interpretable tool for clinical applications.
@@ -142,16 +140,6 @@ python inertrope.py --input normalized_itc.csv --output model.pkl --mode train
 python inference.py -i new_itc.csv -m model.pkl -o predictions.csv
 
 ```
-
----
-
-## Example Notebook
-
-A Colab demo notebook is available:
-
-👉 Inertrope Colab Demo 
-
----
 
 ## Outputs
 
