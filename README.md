@@ -1,6 +1,6 @@
 # Inertrope
 
-Inertrope is a machine learning–based multiclass framework designed to classify patient ITC (Isothermal Titration Calorimetry) data into **normal**, **benign**, or **cancer** categories. The pipeline combines robust normalization, feature engineering, and a multiclass classification model, making it a practical and interpretable tool for clinical applications.
+Inertrope is a machine learning–driven multiclass framework developed to categorize patient data from Isothermal Titration Calorimetry (ITC) and Spectroscopic measurements into Healthy, Benign, and Cancer classes. The pipeline integrates systematic normalization, feature engineering, and advanced classification modeling, providing a robust and interpretable platform for clinical diagnostics.
 
 ---
 
@@ -34,7 +34,7 @@ Isothermal Titration Calorimetry (ITC) generates thermodynamic binding data that
 
 1. **Normalizing ITC data** to correct baseline drift and batch effects.
 2. **Extracting features** relevant to differential thermodynamic profiles.
-3. **Training a multiclass ML model** capable of discriminating between *normal*, *benign*, and *cancer* cohorts.
+3. **Training a multiclass ML model** capable of discriminating between *Healthy*, *Benign*, and *Cancer* cohorts.
 
 This stepwise approach ensures reproducibility, clinical interpretability, and scalability.
 
@@ -55,6 +55,7 @@ conda activate inertrope
 ### Major dependencies
 
 - **pandas**
+- **tsfresh** (time-series feature extraction for ITC thermograms)
 - **numpy**
 - **scikit-learn (v1.0.2 or higher)**
 - **matplotlib**
@@ -64,13 +65,13 @@ conda activate inertrope
 Install directly:
 
 ```bash
-pip install pandas numpy scikit-learn matplotlib tqdm joblib
+pip install pandas numpy scikit-learn matplotlib tqdm joblib  tsfresh 
 
 ```
 
-### Optional dependencies
 
-- **tsfresh** (time-series feature extraction for ITC thermograms)
+
+- **shap** (time-series feature extraction for ITC thermograms)
 - **lime** (model interpretability)
 
 ```bash
@@ -116,11 +117,11 @@ The Inertrope pipeline consists of **three major steps**:
     - Heat per injection normalization
     - Replicate merging
 2. **Feature Extraction**
-    - Thermodynamic descriptors (ΔH, ΔS, binding enthalpy profiles)
+    - Thermodynamic descriptors
     - Statistical descriptors (mean, variance, slope)
-    - Optional: tsfresh time-series features
+    - tsfresh time-series features
 3. **Multiclass Model Training**
-    - Targets: **Normal**, **Benign**, **Cancer**
+    - Targets: **Healthy**, **Benign**, **Cancer**
     - Models: RandomForest, XGBoost, Logistic Regression
     - Cross-validation with metrics (Accuracy, F1, AUC)
     - Export trained model as `.pkl`
@@ -143,12 +144,7 @@ python inference.py -i new_itc.csv -m model.pkl -o predictions.csv
 
 ## Outputs
 
-- **Normalized Data**: `normalized_itc.csv`
+- **Normalized Data**: `normalized.csv`
 - **Prediction Results**: `predictions.csv` with probabilities for Normal, Benign, Cancer
 
----
 
-## Interpretability
-
-- **LIME**: Explains feature contribution to individual predictions.
-- **SHAP** : Global and local interpretability plots.
