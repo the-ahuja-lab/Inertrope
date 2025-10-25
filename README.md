@@ -71,11 +71,10 @@ pip install pandas numpy scikit-learn matplotlib tqdm joblib  tsfresh
 
 
 
-- **shap** (time-series feature extraction for ITC thermograms)
-- **lime** (model interpretability)
+- **SHAP** (SHapley Additive exPlanations)
 
 ```bash
-pip install tsfresh lime
+pip install shap
 
 ```
 
