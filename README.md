@@ -1,7 +1,6 @@
 #  Inertrope
 
-**Inertrope** is a machine learning–driven multiclass framework designed to classify patient data from **Isothermal Titration Calorimetry (ITC)** and **Spectroscopic measurements** into **Healthy**, **Benign**, and **Cancer** classes.  
-It integrates systematic normalization, feature engineering, and advanced classification modeling to provide a **robust, interpretable**, and **scalable** platform for clinical diagnostics.
+**Inertrope** , a computational framework for the multiclass classification of biophysical data for clinical diagnostics. Inertrope implements an end-to-end machine learning pipeline to process and classify patient data derived from Isothermal Titration Calorimetry (ITC) and Spectroscopic measurements. The framework integrates systematic normalization, robust feature engineering, and advanced classification modeling to interpret complex thermodynamic fingerprints. It provides a scalable and interpretable platform for developing 'diagnostic-by-thermodynamics' liquid biopsies, enabling the stratification of Healthy, Benign, and Cancer states.
 
 ---
 
