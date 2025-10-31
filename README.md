@@ -21,18 +21,6 @@ It integrates systematic normalization, feature engineering, and advanced classi
 </p>
 
 ---
-
-## 🧩 Introduction
-
-**Isothermal Titration Calorimetry (ITC)** produces thermodynamic binding profiles that often require baseline correction and normalization before analysis.  
-**Inertrope** automates this process by:
-
-1. **Normalizing ITC data** to correct baseline drift and batch effects  
-2. **Extracting key thermodynamic and statistical features**  
-3. **Training multiclass ML models** to discriminate between *Healthy*, *Benign*, and *Cancer* samples  
-
-This pipeline ensures **reproducibility**, **clinical interpretability**, and **scalability**.
-
 ---
 
 ## ⚙️ Installation
