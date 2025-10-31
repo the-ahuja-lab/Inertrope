@@ -64,7 +64,7 @@ The Inertrope pipeline consists of **three main steps**:
 - Baseline correction for ITC and Absorbance data 
 
 
-### 2️⃣ Feature Extraction from ITC Differential Power (DP μ/sec) Calorimetric Fingerprints  
+### 2️⃣ Feature Extraction from ITC Differential Power (DP μcal/sec) Calorimetric Fingerprints  
 - Time-series features via `tsfresh`
 - Log Normalization    
 
