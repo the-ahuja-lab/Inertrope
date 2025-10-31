@@ -8,7 +8,7 @@ from tsfresh.utilities.dataframe_functions import impute
 
 
 # ==========================================================
-# 🔹 Helper Functions
+#  Helper Functions
 # ==========================================================
 def detect_sample_column(df):
     """Auto-detect a sample ID column (case/format insensitive)."""
@@ -142,7 +142,7 @@ def predict_multiclass(features, model_path):
         columns=["Prob_Healthy", "Prob_Benign", "Prob_Cancer"]
     )
 
-    # ✅ Proper, clear output structure
+    # output structure
     result_df = pd.DataFrame({
         "Sample_ID": features.index,
         "Predicted_Status": pred_labels.values
