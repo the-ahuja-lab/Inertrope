@@ -50,21 +50,24 @@ conda activate inertrope
 - `numpy >= 1.24.3`
 - `scikit-learn == 1.3.0`
 - `tsfresh == 0.20.3`
-- `matplotlib`
 - `tqdm`
 - `joblib`
 
 
 
 
-### 🧪 From Source (Development Mode)
+### 🧪 From Source
 
 ```bash
 git clone https://github.com/the-ahuja-lab/inertrope.git
 cd inertrope
 pip install -e .
 ```
+### 🧪 Using pip
 
+```python
+!pip install git+https://github.com/the-ahuja-lab/Inertrope.git
+```
 ---
 
 ## 🔑 License Key
@@ -86,8 +89,8 @@ The Inertrope pipeline consists of **three main steps**:
 - Time-series features via `tsfresh`
 - Log Normalization    
 
-### 3️⃣ Infrence of patient clincal status using Multiclass Classification Model
-- Targets: *Healthy*, *Benign*, *Cancer*   
+### 3️⃣ Inference of patient clinical status using Multiclass Model trained on 1.) ITC data  2.) ITC and UV-Vis Absorbance data of Healthy, Benign, and Cancer patients' plasma with inertrope.
+- Classes: *Healthy*, *Benign*, *Cancer*   
 
 ---
 
