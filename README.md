@@ -63,13 +63,6 @@ pip install pandas numpy scikit-learn==1.3.0 matplotlib tqdm joblib  tsfresh
 
 ## Installation
 
-Inertrope can be installed directly via pip:
-
-```bash
-pip install inertrope
-
-```
-
 For development mode (from source):
 
 ```bash
