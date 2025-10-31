@@ -18,7 +18,6 @@ Inertrope is a machine learning–driven multiclass framework developed to categ
   <img src="https://img.shields.io/badge/License-MIT-blue.svg">
   <img src="https://img.shields.io/badge/docs-passing-green">
   <img src="https://img.shields.io/badge/python-3.9-blue">
-  <img src="https://img.shields.io/badge/pypi-v0.1.6-orange">
   </a>
   <a href="https://github.com/YOUR_USERNAME/YOUR_REPO">
     <img src="https://img.shields.io/badge/Code-Source-black">
