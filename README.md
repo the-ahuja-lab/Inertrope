@@ -53,10 +53,10 @@ conda activate inertrope
 
 ### Major dependencies
 
-- **pandas**
-- **tsfresh** (time-series feature extraction for ITC thermograms)
-- **numpy**
-- **scikit-learn (v1.0.2 or higher)**
+- **pandas** (v1.24.4)
+- **tsfresh** (v0.20.3) (time-series feature extraction for ITC thermograms)
+- **numpy** (v1.24.3)
+- **scikit-learn (v1.3.0)**
 - **matplotlib**
 - **tqdm**
 - **joblib**
