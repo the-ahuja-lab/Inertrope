@@ -73,7 +73,7 @@ pip install inertrope
 For development mode (from source):
 
 ```bash
-git clone https://github.com/yourlab/inertrope.git
+git clone https://github.com/the-ahuja-lab/inertrope.git
 cd inertrope
 pip install -e .
 
