@@ -1,4 +1,4 @@
-# 🧠 Inertrope
+#  Inertrope
 
 **Inertrope** is a machine learning–driven multiclass framework designed to classify patient data from **Isothermal Titration Calorimetry (ITC)** and **Spectroscopic measurements** into **Healthy**, **Benign**, and **Cancer** classes.  
 It integrates systematic normalization, feature engineering, and advanced classification modeling to provide a **robust, interpretable**, and **scalable** platform for clinical diagnostics.
@@ -7,7 +7,7 @@ It integrates systematic normalization, feature engineering, and advanced classi
 
 <br>
 <div align="center">
-  <img src="Images/inertrope.png" alt="Inertrope" width="450">
+  <img src="Images/inertrope.png" alt="Inertrope" width="750">
 </div>
 <br>
 
@@ -82,7 +82,7 @@ The Inertrope pipeline consists of **three main steps**:
 - Baseline correction for ITC and Absorbance data 
 
 
-### 2️⃣ Feature Extraction from ITC Differential Power (DP u/sec) Calorimetric Fingerprints  
+### 2️⃣ Feature Extraction from ITC Differential Power (DP μ/sec) Calorimetric Fingerprints  
 - Time-series features via `tsfresh`
 - Log Normalization    
 
@@ -92,11 +92,20 @@ The Inertrope pipeline consists of **three main steps**:
 ---
 
 ## 🧬 Quick Start
+```python
 
+from Inertrope import inertrope
+
+## Configure Muticlass Model paths  
+
+inertrope.configure_models(
+    itc_model_path="/path/final_extratrees_combined.joblib",
+    combined_model_path="/path/final_extratrees_combined.joblib"
+)
+```
 ### 🧪 Predict from ITC Data
 
 ```python
-from Inertrope import inertrope
 
 results_itc = inertrope.pred_itc("ITC_normalized_data.csv", out_csv="itc_predictions.csv")
 ```
