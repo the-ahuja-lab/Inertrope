@@ -78,7 +78,7 @@ The Inertrope pipeline consists of **three main steps**:
 
 from Inertrope import inertrope
 
-## Configure Muticlass Model paths  
+## Configure Multiclass Model paths  
 
 inertrope.configure_models(
     itc_model_path="/path/final_extratrees_combined.joblib",
