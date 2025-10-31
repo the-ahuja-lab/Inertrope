@@ -56,13 +56,6 @@ pip install -e .
 ```
 ---
 
-## 🔑 License Key
-
-- **Academic use** – Free for research and educational institutions  
-- **Commercial use** – Requires a license key (contact us for details)
-
----
-
 ## 🚀 Workflow Overview
 
 The Inertrope pipeline consists of **three main steps**:
