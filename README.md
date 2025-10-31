@@ -38,13 +38,6 @@ Isothermal Titration Calorimetry (ITC) generates thermodynamic binding data that
 This stepwise approach ensures reproducibility, clinical interpretability, and scalability.
 
 ---
-
-## Dependencies
-
-### Strong dependency
-
-- **RDKit** (for molecular feature integration, optional but recommended)
-
 ```bash
 conda create -c conda-forge -n inertrope
 conda activate inertrope
@@ -64,20 +57,9 @@ conda activate inertrope
 Install directly:
 
 ```bash
-pip install pandas numpy scikit-learn matplotlib tqdm joblib  tsfresh 
+pip install pandas numpy scikit-learn==1.3.0 matplotlib tqdm joblib  tsfresh 
 
 ```
-
-
-
-- **SHAP** (SHapley Additive exPlanations)
-
-```bash
-pip install shap
-
-```
-
----
 
 ## Installation
 
@@ -126,23 +108,31 @@ The Inertrope pipeline consists of **three major steps**:
 
 ---
 
-## Quick Start
+## Quick Start for Inference of patient clinical status into 3 classes (Healthy, Benign and Cancer)  
 
 ```bash
-# Step 1: Normalize ITC data
-python inertrope.py --input raw_itc.csv --output normalized_itc.csv --mode normalize
 
-# Step 2: Train multiclass model
-python inertrope.py --input normalized_itc.csv --output model.pkl --mode train
+from Inertrope import inertrope
 
-# Step 3: Inference on new samples
-python inference.py -i new_itc.csv -m model.pkl -o predictions.csv
+```
+
+## Using Isothermal Calorimetry Data for plasma samples
+
+```bash
+results_ITC = inertrope.pred_itc("example_itc_data.csv", out_csv="itc_predictions.csv")
+```
+
+## Using Isothermal Calorimetry Data and UV-Visible Wavelength (200-900nm) for plasma samples
+
+```bash
+results_combined = inertrope.pred_combined("example_combined_data.csv", out_csv="combined_predictions.csv")
+```
+
 
 ```
 
 ## Outputs
-
-- **Normalized Data**: `normalized.csv`
-- **Prediction Results**: `predictions.csv` with probabilities for Normal, Benign, Cancer
+pandas Dataframe of containing
+|Sample_Id | Prediction | Prob_Healthy | Prob_Benign | Prob_Cancer
 
 
