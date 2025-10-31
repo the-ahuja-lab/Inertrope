@@ -118,3 +118,16 @@ results_combined = inertrope.pred_combined("ITC_normalized_combined_data.csv", o
 
 ---
 
+## 📊 Output Format
+
+Predictions are returned as a pandas DataFrame:
+
+| Sample_Id | Prediction | Prob_Healthy | Prob_Benign | Prob_Cancer |
+|------------|-------------|---------------|---------------|--------------|
+| P001 | Healthy | 0.91 | 0.06 | 0.03 |
+| P002 | Cancer  | 0.02 | 0.10 | 0.88 |
+
+An output CSV file (`*_predictions.csv`) will also be generated if `out_csv` is specified.
+
+---
+
