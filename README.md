@@ -1,131 +1,111 @@
-# Inertrope
+# 🧠 Inertrope
 
-Inertrope is a machine learning–driven multiclass framework developed to categorize patient data from Isothermal Titration Calorimetry (ITC) and Spectroscopic measurements into Healthy, Benign, and Cancer classes. The pipeline integrates systematic normalization, feature engineering, and advanced classification modeling, providing a robust and interpretable platform for clinical diagnostics.
+**Inertrope** is a machine learning–driven multiclass framework designed to classify patient data from **Isothermal Titration Calorimetry (ITC)** and **Spectroscopic measurements** into **Healthy**, **Benign**, and **Cancer** classes.  
+It integrates systematic normalization, feature engineering, and advanced classification modeling to provide a **robust, interpretable**, and **scalable** platform for clinical diagnostics.
 
 ---
 
-
 <br>
 <div align="center">
-<img src="Images/inertrope.png" alt="Inertrope" ></div>
+  <img src="Images/inertrope.png" alt="Inertrope" width="450">
+</div>
 <br>
 
-<div align="left">
-
-<div align="left">
-
-<p>
+<p align="center">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg">
   <img src="https://img.shields.io/badge/docs-passing-green">
-  <img src="https://img.shields.io/badge/python-3.9-blue">
-  </a>
-  <a href="https://github.com/YOUR_USERNAME/YOUR_REPO">
+  <img src="https://img.shields.io/badge/python-3.9+-blue">
+  <a href="https://github.com/the-ahuja-lab/inertrope">
     <img src="https://img.shields.io/badge/Code-Source-black">
   </a>
 </p>
 
-</div>
+---
 
+## 🧩 Introduction
 
-## Introduction
+**Isothermal Titration Calorimetry (ITC)** produces thermodynamic binding profiles that often require baseline correction and normalization before analysis.  
+**Inertrope** automates this process by:
 
-Isothermal Titration Calorimetry (ITC) generates thermodynamic binding data that often require careful normalization before they can be reliably used for downstream classification. Inertrope addresses this by:
+1. **Normalizing ITC data** to correct baseline drift and batch effects  
+2. **Extracting key thermodynamic and statistical features**  
+3. **Training multiclass ML models** to discriminate between *Healthy*, *Benign*, and *Cancer* samples  
 
-1. **Normalizing ITC data** to correct baseline drift and batch effects.
-2. **Extracting features** relevant to differential thermodynamic profiles.
-3. **Training a multiclass ML model** capable of discriminating between *Healthy*, *Benign*, and *Cancer* cohorts.
-
-This stepwise approach ensures reproducibility, clinical interpretability, and scalability.
+This pipeline ensures **reproducibility**, **clinical interpretability**, and **scalability**.
 
 ---
+
+## ⚙️ Installation
+
+### 🧱 Using Conda
+
 ```bash
-conda create -c conda-forge -n inertrope
+conda create -n inertrope -c conda-forge python=3.9
 conda activate inertrope
-
 ```
 
-### Major dependencies
+### 📦 Required Dependencies
 
-- **pandas** (v1.24.4)
-- **tsfresh** (v0.20.3) (time-series feature extraction for ITC thermograms)
-- **numpy** (v1.24.3)
-- **scikit-learn (v1.3.0)**
-- **matplotlib**
-- **tqdm**
-- **joblib**
+- `pandas >= 1.24.4`
+- `numpy >= 1.24.3`
+- `scikit-learn == 1.3.0`
+- `tsfresh == 0.20.3`
+- `matplotlib`
+- `tqdm`
+- `joblib`
 
-Install directly:
 
-```bash
-pip install pandas numpy scikit-learn==1.3.0 matplotlib tqdm joblib  tsfresh 
 
-```
 
-## Installation
-
-For development mode (from source):
+### 🧪 From Source (Development Mode)
 
 ```bash
 git clone https://github.com/the-ahuja-lab/inertrope.git
 cd inertrope
 pip install -e .
-
 ```
 
 ---
 
-## License Key
+## 🔑 License Key
 
-- **Academic use**: Free for research and educational institutions.
-- **Commercial use**: Requires a license key. Contact us for details.
-
----
-
-## Workflow Overview
-
-The Inertrope pipeline consists of **three major steps**:
-
-1. **ITC Data Normalization**
-    - Baseline correction
-    - Heat per injection normalization
-    - Replicate merging
-2. **Feature Extraction**
-    - Thermodynamic descriptors
-    - Statistical descriptors (mean, variance, slope)
-    - tsfresh time-series features
-3. **Multiclass Model Training**
-    - Targets: **Healthy**, **Benign**, **Cancer**
-    - Models: RandomForest, XGBoost, Logistic Regression
-    - Cross-validation with metrics (Accuracy, F1, AUC)
-    - Export trained model as `.pkl`
+- **Academic use** – Free for research and educational institutions  
+- **Commercial use** – Requires a license key (contact us for details)
 
 ---
 
-## Quick Start for Inference of patient clinical status into 3 classes (Healthy, Benign and Cancer)  
+## 🚀 Workflow Overview
 
-```bash
+The Inertrope pipeline consists of **three main steps**:
 
+### 1️⃣ ITC Data Normalization
+- Baseline correction for ITC and Absorbance data 
+
+
+### 2️⃣ Feature Extraction from ITC Differential Power (DP u/sec) Calorimetric Fingerprints  
+- Time-series features via `tsfresh`
+- Log Normalization    
+
+### 3️⃣ Infrence of patient clincal status using Multiclass Classification Model
+- Targets: *Healthy*, *Benign*, *Cancer*   
+
+---
+
+## 🧬 Quick Start
+
+### 🧪 Predict from ITC Data
+
+```python
 from Inertrope import inertrope
 
+results_itc = inertrope.pred_itc("ITC_normalized_data.csv", out_csv="itc_predictions.csv")
 ```
 
-## Using Isothermal Calorimetry Data for plasma samples
+### 🔬 Predict from Combined ITC + UV-Vis Spectroscopy Data (200–900 nm)
 
-```bash
-results_ITC = inertrope.pred_itc("example_itc_data.csv", out_csv="itc_predictions.csv")
+```python
+results_combined = inertrope.pred_combined("ITC_normalized_combined_data.csv", out_csv="combined_predictions.csv")
 ```
 
-## Using Isothermal Calorimetry Data and UV-Visible Wavelength (200-900nm) for plasma samples
-
-```bash
-results_combined = inertrope.pred_combined("example_combined_data.csv", out_csv="combined_predictions.csv")
-```
-
-
-```
-
-## Outputs
-pandas Dataframe of containing
-|Sample_Id | Prediction | Prob_Healthy | Prob_Benign | Prob_Cancer
-
+---
 
