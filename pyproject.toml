@@ -1,1 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
+[project]
+name = "Inertrope"
+version = "0.1.0"
+description = "Tools for calorimetry data analysis and normalization."
+readme = "README.md"
+authors = [
+  { name = "The Ahuja Lab", email = "gaurav.ahuja@iiitd.ac.in" }
+]
+license = { file = "LICENSE.md" }
+requires-python = ">=3.8"
+dependencies = [
+  "numpy",
+  "pandas",
+  "matplotlib",
+  "scipy",
+  "scikit-learn",
+  "tsfresh"
+]
+
+[project.urls]
+Homepage = "https://github.com/the-ahuja-lab/Inertrope"
+Issues = "https://github.com/the-ahuja-lab/Inertrope/issues"
+
+[tool.setuptools]
+packages = ["inertrope"]
+
+[tool.setuptools.package-dir]
+inertrope = "."
