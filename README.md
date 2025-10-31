@@ -26,7 +26,7 @@
 ### 🧱 Using Conda
 
 ```bash
-conda create -n inertrope -c conda-forge python=3.9
+conda create -f environment.yml
 conda activate inertrope
 ```
 
