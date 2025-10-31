@@ -52,7 +52,7 @@ pip install -e .
 ### 🧪 Using pip
 
 ```python
-!pip install git+https://github.com/the-ahuja-lab/Inertrope.git
+pip install git+https://github.com/the-ahuja-lab/Inertrope.git
 ```
 ---
 
