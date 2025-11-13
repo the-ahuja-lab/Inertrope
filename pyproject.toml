@@ -17,6 +17,7 @@ dependencies = [
   "pandas",
   "scikit-learn==1.3.0",
   "tsfresh==0.20.3",
+  "scipy==1.13.1",
   "joblib",
   'tqdm',
 ]
