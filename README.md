@@ -34,7 +34,7 @@ conda activate inertrope
 
 - `pandas >= 1.24.4`
 - `numpy >= 1.24.3`
-- `scikit-learn == 1.3.0`
+- `scikit-learn == 1.7.1`
 - `tsfresh == 0.20.3`
 - `tqdm`
 - `joblib`
