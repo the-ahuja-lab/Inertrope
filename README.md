@@ -6,7 +6,7 @@
 
 <br>
 <div align="center">
-  <img src="Images/inertrope.png" alt="Inertrope" width="750">
+  <img src="Images/in.png" alt="Inertrope" width="750">
 </div>
 <br>
 
