@@ -193,7 +193,7 @@ class inertrope:
             raise ValueError("No 'Time_' columns found.")
 
         df_time = df[time_cols].copy()
-        df_time_norm, _ = normalize_data(df_time, lognorm=True)
+        df_time_norm, _ = normalize_data(df_time, lognorm=False)
 
         # Safe concatenation to prevent fragmentation
         df_time_norm = pd.concat([sample_ids, df_time_norm], axis=1).set_index(sample_col)
