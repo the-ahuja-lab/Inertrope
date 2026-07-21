@@ -1,135 +1,298 @@
 import pandas as pd
-import numpy as np
 import re
+
+
+# ============================================================
+# 1. Read raw data and validate numeric columns
+# ============================================================
 
 df = pd.read_csv("ITC_data_raw.csv")
 
-#Check for nan
+# Work on a copy so the original raw data remains unchanged
+corrected_data = df.copy()
+
 non_numeric_cols = []
 
-for c in df.columns:
-    if c == "Time":
+for col in corrected_data.columns:
+    if col == "Time":
         continue
-    # try converting to numeric; if any fail → text present
+
     try:
-        pd.to_numeric(df[c], errors='raise')
-    except Exception:
-        non_numeric_cols.append(c)
+        corrected_data[col] = pd.to_numeric(
+            corrected_data[col],
+            errors="raise"
+        )
+    except (ValueError, TypeError):
+        non_numeric_cols.append(col)
 
-print(f"\n Columns containing text / mixed data: {len(non_numeric_cols)}")
+print(
+    f"\nColumns containing non-numeric or mixed data: "
+    f"{len(non_numeric_cols)}"
+)
+
 if non_numeric_cols:
-    print(non_numeric_cols[:15])  # show first few
+    print(non_numeric_cols[:15])
+    raise ValueError(
+        "Non-numeric values were found. Clean these columns "
+        "before applying corrections."
+    )
 
 
+# ============================================================
+# 2. Read and validate correction factors
+# ============================================================
 
-#read correction factor
-corrections_df = pd.read_csv("Raw plasma data - corrections(1).csv")
+corrections_df = pd.read_csv(
+    "Raw plasma data - corrections(1).csv"
+)
+
+required_correction_cols = {"Sample Id", "Correction"}
+
+missing_correction_cols = (
+    required_correction_cols - set(corrections_df.columns)
+)
+
+if missing_correction_cols:
+    raise KeyError(
+        f"Missing correction columns: {missing_correction_cols}"
+    )
+
+corrections_df["Sample Id"] = (
+    corrections_df["Sample Id"]
+    .astype(str)
+    .str.strip()
+)
+
+corrections_df["Correction"] = pd.to_numeric(
+    corrections_df["Correction"],
+    errors="raise"
+)
+
+# Prevent ambiguous correction factors
+duplicate_ids = corrections_df.loc[
+    corrections_df["Sample Id"].duplicated(keep=False),
+    "Sample Id"
+].unique()
+
+if len(duplicate_ids) > 0:
+    raise ValueError(
+        f"Duplicate correction factors found for: "
+        f"{duplicate_ids.tolist()}"
+    )
+
+corrections_map = corrections_df.set_index(
+    "Sample Id"
+)["Correction"].to_dict()
 
 
+# ============================================================
+# 3. Multiply sample-specific columns by correction factors
+# ============================================================
 
-# Create a simple correction map: {"PB1": value, "PB2": value, ...}
-corrections_map = dict(zip(corrections_df["Sample Id"], corrections_df["Correction"]))
-
-# Create a list to store summary info
 correction_summary = []
 
-# Apply corrections
 for sample_id, factor in corrections_map.items():
-    # Find columns that contain the sample ID
-    pattern = rf"(?:^|)({sample_id})(?:|$)"
-    matching_cols = [col for col in corrected_data.columns if re.search(pattern, col)]
 
-    if matching_cols:
-        corrected_data[matching_cols] = corrected_data[matching_cols].apply(lambda col: col * factor)
+    # Exact underscore-delimited token matching.
+    # PB1 matches C7_PB1_1 and B_PB1,
+    # but does not match C7_PB10_1.
+    pattern = re.compile(
+        rf"(^|_){re.escape(sample_id)}(_|$)"
+    )
 
-        # Store which columns were corrected and with what factor
+    matching_cols = [
+        col
+        for col in corrected_data.columns
+        if col != "Time" and pattern.search(col)
+    ]
+
+    if not matching_cols:
         correction_summary.append({
             "Sample ID": sample_id,
             "Correction Factor": factor,
-            "Corrected Columns": matching_cols
+            "Corrected Columns": "",
+            "Status": "No matching columns"
         })
+        continue
+
+    corrected_data.loc[:, matching_cols] = (
+        corrected_data[matching_cols].mul(factor)
+    )
+
+    correction_summary.append({
+        "Sample ID": sample_id,
+        "Correction Factor": factor,
+        "Corrected Columns": ", ".join(matching_cols),
+        "Status": "Corrected"
+    })
+
+correction_summary_df = pd.DataFrame(correction_summary)
 
 
-# Extract the two columns into a new DataFrame
-new_df = corrected_data[['B_B', 'C7_buffer']].copy()
+# ============================================================
+# 4. Resolve the two common-control columns
+# ============================================================
+
+# This supports both the names stated in your description
+# and the names used in your original code.
+control_aliases = {
+    "BB": ["BB", "B_B"],
+    "B_C7": ["B_C7", "C7_buffer"]
+}
 
 
-# Create new DataFrame to store normalized values (plasma-control normalization)
-normalized_df = pd.DataFrame()
-normalized_df["Time"] = corrected_data["Time"]
+def resolve_column(dataframe, aliases, control_name):
+    """Return the first available column from a list of aliases."""
+    for alias in aliases:
+        if alias in dataframe.columns:
+            return alias
 
-# Store summary info
+    raise KeyError(
+        f"Could not find the {control_name} control column. "
+        f"Expected one of: {aliases}"
+    )
+
+
+bb_col = resolve_column(
+    corrected_data,
+    control_aliases["BB"],
+    "BB"
+)
+
+b_c7_col = resolve_column(
+    corrected_data,
+    control_aliases["B_C7"],
+    "B_C7"
+)
+
+print(f"BB control column: {bb_col}")
+print(f"B_C7 control column: {b_c7_col}")
+
+
+# ============================================================
+# 5. Plasma-buffer and common-control normalization
+# ============================================================
+
+normalized_df = corrected_data[["Time"]].copy()
+
 normalization_summary = []
 
-# Loop through all columns
-for col in corrected_data.columns:
-    # Match columns like C7_PN1_1, C7_PB1_1, C7_PC1_1
-    match = re.match(r'C7_P([NBC])(\d+)_(\d+)', col)
-    if match:
-        letter = match.group(1)   # N, B, or C
-        pc = match.group(2)       # Number
-        rep = match.group(3)      # Replicate
+# Matches:
+# C7_PN1_1
+# C7_PB10_2
+# C7_PC3_1
+sample_pattern = re.compile(
+    r"^C7_P([NBC])(\d+)_(\d+)$"
+)
 
-        # Use the same letter as the original column for baseline
-        b_col = f'B_P{letter}{pc}'
-        norm_col = f'Norm_C7_P{letter}{pc}_{rep}'
+for sample_col in corrected_data.columns:
 
-        # Perform normalization
-        normalized_df[norm_col] = corrected_data[col] / corrected_data[b_col]
+    match = sample_pattern.fullmatch(sample_col)
 
-        # Record in summary
-        normalization_summary.append({
-            "Normalized Column": norm_col,
-            "Original Column": col,
-            "Baseline Column": b_col
-        })
+    if not match:
+        continue
+
+    sample_group = match.group(1)    # B, N or C
+    sample_number = match.group(2)   # 1, 2, 10, ...
+    replicate = match.group(3)       # 1, 2, ...
+
+    plasma_buffer_col = (
+        f"B_P{sample_group}{sample_number}"
+    )
+
+    if plasma_buffer_col not in corrected_data.columns:
+        print(
+            f"Skipping {sample_col}: "
+            f"missing plasma-buffer column "
+            f"{plasma_buffer_col}"
+        )
+        continue
+
+    output_col = (
+        f"Norm_C7_P{sample_group}"
+        f"{sample_number}_{replicate}"
+    )
+
+    # Step 1: subtract the matching plasma buffer
+    plasma_normalized = (
+        corrected_data[sample_col]
+        - corrected_data[plasma_buffer_col]
+    )
+
+    # Step 2: subtract both common controls
+    normalized_df[output_col] = (
+        plasma_normalized
+        - corrected_data[bb_col]
+        - corrected_data[b_c7_col]
+    )
+
+    normalization_summary.append({
+        "Normalized Column": output_col,
+        "Sample Column": sample_col,
+        "Plasma Buffer Column": plasma_buffer_col,
+        "BB Column": bb_col,
+        "B_C7 Column": b_c7_col,
+        "Calculation": (
+            f"({sample_col} - {plasma_buffer_col}) "
+            f"- {bb_col} - {b_c7_col}"
+        )
+    })
+
+normalization_summary_df = pd.DataFrame(
+    normalization_summary
+)
 
 
+# ============================================================
+# 6. Arrange columns as PB, PN and PC
+# ============================================================
 
-# Subtract BB from each row of each column in normalized_df, excluding "Time"
-for col in normalized_df.columns:
-    if col != "Time":
-        normalized_df[col] = normalized_df[col] / new_df["B_B"]
+group_order = {
+    "B": 0,
+    "N": 1,
+    "C": 2
+}
 
 
-# Subtract BB from each row of each column in normalized_df, excluding "Time"
-for col in normalized_df.columns:
-    if col != "Time":
-        normalized_df[col] = normalized_df[col] / new_df["C7_buffer"]
+def normalized_column_sort_key(col):
+    """
+    Sort by:
+    1. PB, PN, PC
+    2. sample number
+    3. replicate number
+    """
+    match = re.fullmatch(
+        r"Norm_C7_P([BNC])(\d+)_(\d+)",
+        col
+    )
 
-#Rearrange df
-# Keep Time first
-time_col = ['Time']
+    if not match:
+        return (99, 99, 99, col)
 
-# Get all other columns
-other_cols = [c for c in normalized_df.columns if c != 'Time']
+    sample_group = match.group(1)
+    sample_number = int(match.group(2))
+    replicate = int(match.group(3))
 
-# Initialize group dictionary
-grouped_cols = {'PB': [], 'PN': [], 'PC': [], 'other': []}
+    return (
+        group_order[sample_group],
+        sample_number,
+        replicate,
+        col
+    )
 
-# Loop through columns safely
-for col in other_cols:
-    m = re.match(r'.*(P[BPNC]\d+)\d+', col)  # match PB, PN, PC pattern
-    if m:
-        # Extract PB / PN / PC and number
-        letter_num = m.group(1)  # e.g., PB10
-        letter = letter_num[:2]  # PB / PN / PC
-        num = int(letter_num[2:])  # 10
-        if letter in grouped_cols:
-            grouped_cols[letter].append((num, col))
-        else:
-            grouped_cols['other'].append(col)
-    else:
-        grouped_cols['other'].append(col)
 
-# Flatten grouped columns
-sorted_cols = time_col
-for t in ['PB', 'PN', 'PC']:
-    sorted_cols.extend([col for num, col in sorted(grouped_cols[t], key=lambda x: x[0])])
+normalized_cols = [
+    col
+    for col in normalized_df.columns
+    if col != "Time"
+]
 
-# Add other columns
-sorted_cols.extend(grouped_cols['other'])
+normalized_cols = sorted(
+    normalized_cols,
+    key=normalized_column_sort_key
+)
 
-# Reorder DataFrame
-normalized_df = normalized_df[sorted_cols]
+normalized_df = normalized_df[
+    ["Time"] + normalized_cols
+]
 normalized_df
